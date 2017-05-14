@@ -1,0 +1,16 @@
+project02/checkpoint
+*.p
+project02/image_classification.index
+*.meta
+project02/__pycache__/helper.cpython-35.pyc
+*.pyc
+project02/image_classification.data-00000-of-00001
+*.gz
+project02/cifar-10-batches-py/data_batch_5
+project02/cifar-10-batches-py/data_batch_3
+project02/cifar-10-batches-py/data_batch_1
+project02/cifar-10-batches-py/data_batch_2
+project02/cifar-10-batches-py/data_batch_4
+project02/cifar-10-batches-py/test_batch
+project02/cifar-10-batches-py/readme.html
+project02/.ipynb_checkpoints/image_classification-checkpoint.ipynb

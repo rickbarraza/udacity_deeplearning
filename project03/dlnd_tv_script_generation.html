@@ -12253,26 +12253,14 @@ Default GPU Device: /gpu:0
 <span class="sd">    :param rnn_size: Size of RNNs</span>
 <span class="sd">    :return: Tuple (cell, initialize state)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">num_cells</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">dropout_rate</span> <span class="o">=</span> <span class="mf">0.5</span>
-    
-    <span class="c1">#lstm_cell = tf.contrib.rnn.BasicLSTMCell(rnn_size, state_is_tuple=True, reuse=tf.get_variable_scope().reuse)</span>
-    <span class="c1">#lstm_cell = get_basic_cell(rnn_size)</span>
-    
-    <span class="c1"># ARG: This one caught me until time to test...</span>
-    <span class="c1"># rnn_multi_cell = tf.contrib.rnn.MultiRNNCell([lstm_cell]*num_cells)</span>
-    <span class="c1"># need to replace with:</span>
-    <span class="c1">#rnn_multi_cell = tf.contrib.rnn.MultiRNNCell([lstm_cell for _ in range(num_cells)])</span>
-    
-    <span class="c1">#rnn_multi_cell = tf.contrib.rnn.MultiRNNCell([get_basic_cell(rnn_size) for _ in range(num_cells)])</span>
-    
-    
+    <span class="n">num_cells</span> <span class="o">=</span> <span class="mi">1</span>
+        
     <span class="n">cells</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_cells</span><span class="p">):</span>
-        <span class="n">cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">DropoutWrapper</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">GRUCell</span><span class="p">(</span><span class="n">rnn_size</span><span class="p">),</span> <span class="n">input_keep_prob</span><span class="o">=</span><span class="n">dropout_rate</span><span class="p">)</span>
+        <span class="n">cell</span> <span class="o">=</span> <span class="n">get_basic_cell</span><span class="p">(</span><span class="n">rnn_size</span><span class="p">)</span> 
         <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
 
-    <span class="n">rnn_multi_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">MultiRNNCell</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">state_is_tuple</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>    
+    <span class="n">rnn_multi_cell</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">contrib</span><span class="o">.</span><span class="n">rnn</span><span class="o">.</span><span class="n">MultiRNNCell</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">state_is_tuple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>    
     
     <span class="n">state</span> <span class="o">=</span> <span class="n">rnn_multi_cell</span><span class="o">.</span><span class="n">zero_state</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;initial_state&#39;</span><span class="p">)</span>
@@ -12640,13 +12628,13 @@ Tests Passed
 <span class="c1"># RNN Size</span>
 <span class="n">rnn_size</span> <span class="o">=</span> <span class="mi">512</span>
 <span class="c1"># Embedding Dimension Size</span>
-<span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="c1"># Sequence Length</span>
-<span class="n">seq_length</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">seq_length</span> <span class="o">=</span> <span class="mi">200</span>
 <span class="c1"># Learning Rate</span>
-<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="c1"># Show stats for every n number of batches</span>
-<span class="n">show_every_n_batches</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">show_every_n_batches</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">DON&#39;T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE</span>
@@ -12771,27 +12759,27 @@ Tests Passed
 <div class="prompt"></div>
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>output length: 2
-Epoch   0 Batch    0/2   train_loss = 8.822
-Epoch  10 Batch    0/2   train_loss = 5.819
-Epoch  20 Batch    0/2   train_loss = 5.342
-Epoch  30 Batch    0/2   train_loss = 4.926
-Epoch  40 Batch    0/2   train_loss = 4.590
-Epoch  50 Batch    0/2   train_loss = 4.252
-Epoch  60 Batch    0/2   train_loss = 3.933
-Epoch  70 Batch    0/2   train_loss = 3.644
-Epoch  80 Batch    0/2   train_loss = 3.402
-Epoch  90 Batch    0/2   train_loss = 3.202
-Epoch 100 Batch    0/2   train_loss = 3.054
-Epoch 110 Batch    0/2   train_loss = 2.899
-Epoch 120 Batch    0/2   train_loss = 2.779
-Epoch 130 Batch    0/2   train_loss = 2.673
-Epoch 140 Batch    0/2   train_loss = 2.586
-Epoch 150 Batch    0/2   train_loss = 2.494
-Epoch 160 Batch    0/2   train_loss = 2.434
-Epoch 170 Batch    0/2   train_loss = 2.351
-Epoch 180 Batch    0/2   train_loss = 2.303
-Epoch 190 Batch    0/2   train_loss = 2.231
+<pre>output length: 1
+Epoch   0 Batch    0/1   train_loss = 8.821
+Epoch  10 Batch    0/1   train_loss = 6.556
+Epoch  20 Batch    0/1   train_loss = 3.439
+Epoch  30 Batch    0/1   train_loss = 1.991
+Epoch  40 Batch    0/1   train_loss = 1.261
+Epoch  50 Batch    0/1   train_loss = 0.838
+Epoch  60 Batch    0/1   train_loss = 0.564
+Epoch  70 Batch    0/1   train_loss = 0.381
+Epoch  80 Batch    0/1   train_loss = 0.252
+Epoch  90 Batch    0/1   train_loss = 0.162
+Epoch 100 Batch    0/1   train_loss = 0.106
+Epoch 110 Batch    0/1   train_loss = 0.070
+Epoch 120 Batch    0/1   train_loss = 0.051
+Epoch 130 Batch    0/1   train_loss = 0.038
+Epoch 140 Batch    0/1   train_loss = 0.030
+Epoch 150 Batch    0/1   train_loss = 0.025
+Epoch 160 Batch    0/1   train_loss = 0.022
+Epoch 170 Batch    0/1   train_loss = 0.019
+Epoch 180 Batch    0/1   train_loss = 0.018
+Epoch 190 Batch    0/1   train_loss = 0.016
 Model Trained and Saved
 </pre>
 </div>
@@ -13048,22 +13036,18 @@ Model Trained and Saved
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>INFO:tensorflow:Restoring parameters from ./save
-homer_simpson:(beligerent) oh, i wouldn&#39;t be very good.
-homer_simpson:(worried) respect?
-homer_simpson:(worried) i don&#39;t want.
-homer_simpson:(puzzled) oh, i think i can do?
-homer_simpson:(puzzled) disco stu think.
-homer_simpson:(puzzled) disco stu man, i sell you, i don&#39;t sell us.
-homer_simpson:(puzzled) disco stu don&#39;t have disco ducked.
-homer_simpson:(taunting) oh, i round you, you know, i sell a round to do.
-homer_simpson:(taunting) oh, i guess i had to give a round of the pool browns.
-homer_simpson:(worried) respect?
-homer_simpson:(german smile) hey, i guess.
-homer_simpson:(worried) okay, i guess / i saw me for hangin&#39; on?
-homer_simpson:(sings) yeah.
-homer_simpson:(admitting) oh, i am.
-homer_simpson:(chuckles) i can know, but i do you want to the little smallest bowl?
-homer_simpson:(re: homer) hey,
+homer_simpson: thanks, moe. how can i ever repay you?
+moe_szyslak: hey, some things mean more to me than money...
+colonel:(calling down) war game&#39;s over, losers!
+
+
+moe_szyslak:(into phone) i sure am looking forward to my birthday fishing trip... well i&#39;ll see ya soon, this is moe, big day... uh, waitin&#39;, feeling uh, kind of fragile... moe, the birthday boy, listenin&#39; for your car...(sobs)
+lisa_simpson:(bursts in) moe, you&#39;re a published author!
+carl_carlson:(amazed) wow, just think-- earlier tonight, a newly-published poet cleaned up my barf.
+moe_szyslak: moe&#39;s tavern... who? where? to what?(mad) screw you, snail trail!
+lisa_simpson: who was that?
+moe_szyslak: eh, some jerk makin&#39; a prank call with a gag name:&#34; tom wolfe.&#34;
+barney_gumble: tom wolfe?! he wrote&#34; the right stuff&#34; and&#34;
 </pre>
 </div>
 </div>
